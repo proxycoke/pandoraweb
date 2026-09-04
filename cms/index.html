@@ -69,6 +69,13 @@ button:disabled{opacity:.45;cursor:not-allowed;}
 .tabs{display:flex;gap:8px;margin-bottom:20px;}
 .tab-btn{background:#fff;border:1px solid var(--border);}
 .tab-btn.active{background:var(--black);color:#fff;}
+.reclamos-badge{background:#e6392f;color:#fff;border-radius:20px;padding:1px 8px;font-size:11px;font-weight:800;margin-left:6px;}
+.estado-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700;}
+.estado-pill.pendiente{background:#fee2e2;color:#b91c1c;}
+.estado-pill.en_proceso{background:#fef3c7;color:#92400e;}
+.estado-pill.respondido{background:#dcfce7;color:#166534;}
+.reclamo-detail dt{font-size:11.5px;font-weight:700;color:var(--gray);margin-top:10px;}
+.reclamo-detail dd{font-size:13.5px;margin:2px 0 0;}
 
 
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
@@ -245,6 +252,7 @@ button:disabled{opacity:.45;cursor:not-allowed;}
       <button class="tab-btn" data-tab="mantenimiento">🚧 Mantenimiento</button>
       <button class="tab-btn" data-tab="importacion">📦 Importación masiva</button>
       <button class="tab-btn" data-tab="seo">🔍 SEO</button>
+      <button class="tab-btn" data-tab="reclamos">📖 Reclamos<span id="reclamosBadge" class="reclamos-badge" style="display:none;"></span></button>
     </div>
 
     
@@ -402,6 +410,30 @@ button:disabled{opacity:.45;cursor:not-allowed;}
           </div>
         </div>
       </div>
+    </section>
+
+
+    <section id="tab-reclamos" style="display:none;">
+      <p class="hint" style="margin-bottom:14px;">
+        Aquí aparecen los reclamos y quejas registrados por los clientes desde el
+        <a href="../libroreclamaciones/" target="_blank" rel="noopener" style="color:var(--pink-dark);font-weight:700;">Libro de Reclamaciones Virtual</a>
+        de la web. La normativa de INDECOPI exige responder cada uno en un plazo máximo de <strong>15 días hábiles</strong>.
+      </p>
+      <div class="toolbar">
+        <select id="filterReclamoEstado">
+          <option value="">Todos los estados</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="en_proceso">En proceso</option>
+          <option value="respondido">Respondido</option>
+        </select>
+      </div>
+      <table class="product-table">
+        <thead>
+          <tr><th>Folio</th><th>Tipo</th><th>Consumidor</th><th>Contacto</th><th>Fecha</th><th>Estado</th><th></th></tr>
+        </thead>
+        <tbody id="reclamosBody"></tbody>
+      </table>
+      <div class="empty-msg" id="reclamosEmpty" style="display:none;">No hay reclamos ni quejas registrados todavía.</div>
     </section>
   </div>
 </div>
@@ -583,6 +615,51 @@ button:disabled{opacity:.45;cursor:not-allowed;}
 </div>
 
 
+<div class="overlay" id="reclamoOverlay">
+  <div class="modal modal-wide">
+    <h3 style="display:flex;align-items:center;gap:10px;">
+      Reclamo <span id="reclamoModalFolio" style="color:var(--gray);font-weight:400;font-size:14px;"></span>
+    </h3>
+    <dl class="reclamo-detail">
+      <dt>Tipo de solicitud</dt><dd id="rTipo"></dd>
+      <dt>Consumidor</dt><dd id="rConsumidor"></dd>
+      <dt>Documento</dt><dd id="rDocumento"></dd>
+      <dt>Domicilio</dt><dd id="rDomicilio"></dd>
+      <dt>Contacto</dt><dd id="rContacto"></dd>
+      <dt>Padre, madre o apoderado (si es menor de edad)</dt><dd id="rMenorEdad"></dd>
+      <dt>Bien contratado</dt><dd id="rBien"></dd>
+      <dt>Monto reclamado</dt><dd id="rMonto"></dd>
+      <dt>Detalle de la reclamación</dt><dd id="rDetalle"></dd>
+      <dt>Pedido del consumidor</dt><dd id="rPedido"></dd>
+      <dt>Fecha de registro</dt><dd id="rFecha"></dd>
+      <dt>Copia enviada al correo del consumidor</dt><dd id="rCopiaEmail"></dd>
+      <dt>Aviso enviado al negocio</dt><dd id="rAvisoNegocio"></dd>
+    </dl>
+    <div class="field-section">
+      <h4>Gestión de este reclamo</h4>
+      <div class="field">
+        <label>Estado</label>
+        <select id="rEstado">
+          <option value="pendiente">Pendiente</option>
+          <option value="en_proceso">En proceso</option>
+          <option value="respondido">Respondido</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Respuesta (uso interno — todavía no se envía automáticamente al consumidor)</label>
+        <textarea id="rRespuesta" rows="4" placeholder="Escribe aquí la respuesta que le diste a este reclamo o queja..."></textarea>
+        <p class="hint">Por ahora esta respuesta queda guardada como registro interno. Para notificar al cliente, escríbele directamente a su correo o teléfono registrado.</p>
+      </div>
+    </div>
+    <p class="hint" id="reclamoError" style="color:#b91c1c;"></p>
+    <div class="modal-actions">
+      <button class="btn-outline" id="btnCancelReclamo">Cerrar</button>
+      <button class="btn-primary" id="btnSaveReclamo">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <script>
@@ -593,9 +670,10 @@ const SUPABASE_ANON_KEY = "sb_publishable_TywPnO-iX4NKcJuUXBO6jQ_xorjibTI";
 const PHOTOS_BUCKET = "product-photos";
 
 
-let categories = [];       
-let products = [];         
-let slides = [];           
+let categories = [];
+let products = [];
+let slides = [];
+let complaints = [];
 let importFilterIds = null; 
 let accessToken = null;
 let refreshToken = null;
@@ -910,15 +988,17 @@ document.getElementById('btnLogout').addEventListener('click', () => {
 let siteSettings = { maintenance_enabled: false, maintenance_message: '' };
 
 async function loadAll(){
-  const [cats, prods, slds, settingsRows] = await Promise.all([
+  const [cats, prods, slds, settingsRows, compls] = await Promise.all([
     restRequest('GET', 'categories', { query: '?select=*&order=sort_order.asc' }),
     restRequest('GET', 'products', { query: '?select=*&order=sort_order.asc' }),
     restRequest('GET', 'hero_slides', { query: '?select=*&order=sort_order.asc' }).catch(() => []),
     restRequest('GET', 'site_settings', { query: '?select=*&id=eq.1' }).catch(() => []),
+    restRequest('GET', 'complaints_book', { query: '?select=*&order=created_at.desc' }).catch(() => []),
   ]);
   categories = cats;
   products = prods;
   slides = slds;
+  complaints = compls || [];
   if (settingsRows && settingsRows[0]) siteSettings = settingsRows[0];
   document.getElementById('importBox').style.display = (categories.length === 0 && products.length === 0) ? 'block' : 'none';
   renderAll();
@@ -937,6 +1017,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.getElementById('tab-mantenimiento').style.display = btn.dataset.tab === 'mantenimiento' ? 'block' : 'none';
     document.getElementById('tab-importacion').style.display = btn.dataset.tab === 'importacion' ? 'block' : 'none';
     document.getElementById('tab-seo').style.display = btn.dataset.tab === 'seo' ? 'block' : 'none';
+    document.getElementById('tab-reclamos').style.display = btn.dataset.tab === 'reclamos' ? 'block' : 'none';
     localStorage.setItem(ACTIVE_TAB_KEY, btn.dataset.tab);
     if (leavingImportTab && !suppressImportReset) resetImportForm();
     suppressImportReset = false;
@@ -1011,6 +1092,7 @@ function renderAll(){
   renderProducts();
   renderSlides();
   renderMaintenance();
+  renderComplaints();
   document.getElementById('statusPill').textContent = `${products.length} productos · ${categories.length} categorías · ${slides.length} diapositivas`;
 }
 
@@ -1025,6 +1107,98 @@ function renderMaintenance(){
   document.getElementById('btnMaintOn').style.display = on ? 'none' : '';
   document.getElementById('btnMaintOff').style.display = on ? '' : 'none';
 }
+
+
+function estadoLabel(estado){
+  return { pendiente: 'Pendiente', en_proceso: 'En proceso', respondido: 'Respondido' }[estado] || estado;
+}
+function folioFor(c){
+  const year = c.created_at ? new Date(c.created_at).getFullYear() : new Date().getFullYear();
+  return String(c.id).padStart(6, '0') + '-' + year;
+}
+function renderComplaints(){
+  const filterEl = document.getElementById('filterReclamoEstado');
+  const filter = filterEl.value;
+  const list = filter ? complaints.filter(c => c.estado === filter) : complaints;
+  const body = document.getElementById('reclamosBody');
+  const badge = document.getElementById('reclamosBadge');
+  const pendCount = complaints.filter(c => c.estado === 'pendiente').length;
+  if (pendCount > 0) { badge.textContent = pendCount; badge.style.display = ''; }
+  else { badge.style.display = 'none'; }
+
+  if (list.length === 0) {
+    body.innerHTML = '';
+    document.getElementById('reclamosEmpty').style.display = 'block';
+    return;
+  }
+  document.getElementById('reclamosEmpty').style.display = 'none';
+  body.innerHTML = list.map(c => {
+    const fecha = c.created_at ? new Date(c.created_at).toLocaleDateString('es-PE', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+    return `
+    <tr>
+      <td><strong>${folioFor(c)}</strong></td>
+      <td>${c.tipo === 'queja' ? '💬 Queja' : '📝 Reclamo'}</td>
+      <td>${escapeHtml(c.nombre_completo || '')}</td>
+      <td>${escapeHtml(c.email || '')}${c.telefono ? '<br>' + escapeHtml(c.telefono) : ''}</td>
+      <td>${fecha}</td>
+      <td><span class="estado-pill ${c.estado}">${estadoLabel(c.estado)}</span></td>
+      <td class="row-actions"><button class="btn-outline" data-view-reclamo="${c.id}">Ver / Responder</button></td>
+    </tr>`;
+  }).join('');
+
+  body.querySelectorAll('[data-view-reclamo]').forEach(btn => {
+    btn.addEventListener('click', () => openReclamoModal(Number(btn.dataset.viewReclamo)));
+  });
+}
+document.getElementById('filterReclamoEstado').addEventListener('change', renderComplaints);
+
+let editingReclamoId = null;
+const reclamoOverlay = document.getElementById('reclamoOverlay');
+function openReclamoModal(id){
+  const c = complaints.find(x => x.id === id);
+  if (!c) return;
+  editingReclamoId = id;
+  document.getElementById('reclamoModalFolio').textContent = folioFor(c);
+  document.getElementById('rTipo').textContent = c.tipo === 'queja' ? 'Queja' : 'Reclamo';
+  document.getElementById('rConsumidor').textContent = c.nombre_completo || '';
+  document.getElementById('rDocumento').textContent = `${c.tipo_documento || ''} ${c.numero_documento || ''}`.trim();
+  document.getElementById('rDomicilio').textContent = c.domicilio || '';
+  document.getElementById('rContacto').textContent = [c.email, c.telefono].filter(Boolean).join(' · ');
+  document.getElementById('rMenorEdad').textContent = c.nombre_apoderado_menor || 'No aplica (consumidor mayor de edad)';
+  document.getElementById('rBien').textContent = `${c.tipo_bien === 'servicio' ? 'Servicio' : 'Producto'} — ${c.descripcion_bien || ''}`;
+  document.getElementById('rMonto').textContent = c.monto_reclamado != null ? `S/ ${Number(c.monto_reclamado).toFixed(2)}` : 'No especificado';
+  document.getElementById('rDetalle').textContent = c.detalle_reclamo || '';
+  document.getElementById('rPedido').textContent = c.pedido_consumidor || '';
+  document.getElementById('rFecha').textContent = c.created_at ? new Date(c.created_at).toLocaleString('es-PE') : '';
+  document.getElementById('rCopiaEmail').textContent = c.confirmation_email_sent ? '✅ Sí, se le envió' : '⏳ Todavía no (puede tardar unos segundos, o revisa la función en Supabase)';
+  document.getElementById('rAvisoNegocio').textContent = c.business_notification_sent ? '✅ Sí, llegó a ronaldprado90@gmail.com' : '⏳ Todavía no (puede tardar unos segundos, o revisa la función en Supabase)';
+  document.getElementById('rEstado').value = c.estado || 'pendiente';
+  document.getElementById('rRespuesta').value = c.respuesta || '';
+  document.getElementById('reclamoError').textContent = '';
+  reclamoOverlay.classList.add('open');
+}
+function closeReclamoModal(){ reclamoOverlay.classList.remove('open'); }
+document.getElementById('btnCancelReclamo').addEventListener('click', closeReclamoModal);
+document.getElementById('btnSaveReclamo').addEventListener('click', async () => {
+  if (editingReclamoId == null) return;
+  const errEl = document.getElementById('reclamoError');
+  const saveBtn = document.getElementById('btnSaveReclamo');
+  const estado = document.getElementById('rEstado').value;
+  const respuesta = document.getElementById('rRespuesta').value.trim();
+  errEl.textContent = '';
+  saveBtn.disabled = true; saveBtn.textContent = 'Guardando...';
+  try {
+    const body = { estado, respuesta: respuesta || null };
+    if (estado === 'respondido') body.fecha_respuesta = new Date().toISOString();
+    await restRequest('PATCH', 'complaints_book', { query: `?id=eq.${editingReclamoId}`, body, prefer: 'return=representation' });
+    closeReclamoModal();
+    await loadAll();
+  } catch (err) {
+    errEl.textContent = 'Error al guardar: ' + err.message;
+  } finally {
+    saveBtn.disabled = false; saveBtn.textContent = 'Guardar cambios';
+  }
+});
 
 async function saveMaintenance(enabled){
   const statusEl = document.getElementById('maintSaveStatus');

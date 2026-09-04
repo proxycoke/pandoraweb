@@ -288,7 +288,10 @@ nav.cat-nav{
 
 
 footer{background:#f4bad7;color:#424242;padding:44px 0 20px;margin-top:20px;}
-.footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:26px;margin-bottom:30px;}
+.footer-grid{display:grid;grid-template-columns:1.3fr 1fr 0.85fr 1fr;gap:26px;margin-bottom:30px;}
+.footer-reclamos-col{display:flex;align-items:flex-start;justify-content:center;padding-top:2px;}
+.footer-reclamos-col img{max-width:150px;width:100%;height:auto;display:block;transition:opacity .15s;}
+.footer-reclamos-col a:hover img{opacity:.85;}
 .footer-grid h5{color:#e52d80;font-size:14px;margin-bottom:14px;font-weight:800;}
 .footer-grid p, .footer-grid li{font-size:13px;color:#424242;margin-bottom:9px;line-height:1.5;}
 .footer-grid li a:hover{color:#fff;}
@@ -713,12 +716,18 @@ footer{background:#f4bad7;color:#424242;padding:44px 0 20px;margin-top:20px;}
         <p>📞 WhatsApp: +51 981 004 005</p>
         <p>🕒 Lun-Sáb horario de atención</p>
       </div>
+      <div class="footer-reclamos-col">
+        <a href="/libroreclamaciones/" aria-label="Libro de Reclamaciones">
+          <img src="../assets/img/libro-reclamaciones.png" alt="Libro de Reclamaciones" width="500" height="399">
+        </a>
+      </div>
       <div>
         <h5>Enlaces</h5>
         <ul>
           <li><a href="/">Inicio</a></li>
           <li><a href="/categorias/">Categorías</a></li>
           <li><a href="/opcionesdeenvio/">Opciones de envío</a></li>
+          <li><a href="/libroreclamaciones/">Libro de Reclamaciones</a></li>
         </ul>
         <h5 style="margin-top:14px;">Aceptamos pagos en:</h5>
         <div class="payment-row">
