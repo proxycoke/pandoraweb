@@ -426,10 +426,14 @@ button:disabled{opacity:.45;cursor:not-allowed;}
           <option value="en_proceso">En proceso</option>
           <option value="respondido">Respondido</option>
         </select>
+        <button type="button" class="btn-danger" id="btnDeleteSelectedReclamos" style="display:none;">🗑 Eliminar seleccionados (<span id="countSelectedReclamos">0</span>)</button>
       </div>
       <table class="product-table">
         <thead>
-          <tr><th>Folio</th><th>Tipo</th><th>Consumidor</th><th>Contacto</th><th>Fecha</th><th>Estado</th><th></th></tr>
+          <tr>
+            <th style="width:34px;"><input type="checkbox" id="selectAllReclamos" title="Seleccionar todos los que se muestran"></th>
+            <th>Folio</th><th>Tipo</th><th>Consumidor</th><th>Contacto</th><th>Fecha</th><th>Estado</th><th></th>
+          </tr>
         </thead>
         <tbody id="reclamosBody"></tbody>
       </table>
@@ -653,6 +657,7 @@ button:disabled{opacity:.45;cursor:not-allowed;}
     </div>
     <p class="hint" id="reclamoError" style="color:#b91c1c;"></p>
     <div class="modal-actions">
+      <button class="btn-danger" id="btnDeleteReclamo" style="margin-right:auto;">🗑 Eliminar reclamo</button>
       <button class="btn-outline" id="btnCancelReclamo">Cerrar</button>
       <button class="btn-primary" id="btnSaveReclamo">Guardar cambios</button>
     </div>
@@ -674,6 +679,7 @@ let categories = [];
 let products = [];
 let slides = [];
 let complaints = [];
+let selectedReclamoIds = new Set();
 let importFilterIds = null; 
 let accessToken = null;
 let refreshToken = null;
@@ -1116,7 +1122,26 @@ function folioFor(c){
   const year = c.created_at ? new Date(c.created_at).getFullYear() : new Date().getFullYear();
   return String(c.id).padStart(6, '0') + '-' + year;
 }
+function updateReclamoBulkBar(){
+  const btn = document.getElementById('btnDeleteSelectedReclamos');
+  const countEl = document.getElementById('countSelectedReclamos');
+  const n = selectedReclamoIds.size;
+  countEl.textContent = n;
+  btn.style.display = n > 0 ? '' : 'none';
+}
+function updateSelectAllReclamosState(list){
+  const master = document.getElementById('selectAllReclamos');
+  if (!list.length) { master.checked = false; master.indeterminate = false; return; }
+  const selectedInView = list.filter(c => selectedReclamoIds.has(c.id)).length;
+  master.checked = selectedInView === list.length;
+  master.indeterminate = selectedInView > 0 && selectedInView < list.length;
+}
 function renderComplaints(){
+  // Limpia del set cualquier id que ya no exista (por ejemplo, tras un borrado).
+  Array.from(selectedReclamoIds).forEach(id => {
+    if (!complaints.some(c => c.id === id)) selectedReclamoIds.delete(id);
+  });
+
   const filterEl = document.getElementById('filterReclamoEstado');
   const filter = filterEl.value;
   const list = filter ? complaints.filter(c => c.estado === filter) : complaints;
@@ -1126,9 +1151,12 @@ function renderComplaints(){
   if (pendCount > 0) { badge.textContent = pendCount; badge.style.display = ''; }
   else { badge.style.display = 'none'; }
 
+  updateReclamoBulkBar();
+
   if (list.length === 0) {
     body.innerHTML = '';
     document.getElementById('reclamosEmpty').style.display = 'block';
+    updateSelectAllReclamosState(list);
     return;
   }
   document.getElementById('reclamosEmpty').style.display = 'none';
@@ -1136,21 +1164,76 @@ function renderComplaints(){
     const fecha = c.created_at ? new Date(c.created_at).toLocaleDateString('es-PE', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
     return `
     <tr>
+      <td><input type="checkbox" class="reclamo-check" data-id="${c.id}"${selectedReclamoIds.has(c.id) ? ' checked' : ''}></td>
       <td><strong>${folioFor(c)}</strong></td>
       <td>${c.tipo === 'queja' ? '💬 Queja' : '📝 Reclamo'}</td>
       <td>${escapeHtml(c.nombre_completo || '')}</td>
       <td>${escapeHtml(c.email || '')}${c.telefono ? '<br>' + escapeHtml(c.telefono) : ''}</td>
       <td>${fecha}</td>
       <td><span class="estado-pill ${c.estado}">${estadoLabel(c.estado)}</span></td>
-      <td class="row-actions"><button class="btn-outline" data-view-reclamo="${c.id}">Ver / Responder</button></td>
+      <td class="row-actions">
+        <button class="btn-outline" data-view-reclamo="${c.id}">Ver / Responder</button>
+        <button class="btn-danger" data-delete-reclamo="${c.id}" title="Eliminar este reclamo">🗑</button>
+      </td>
     </tr>`;
   }).join('');
 
   body.querySelectorAll('[data-view-reclamo]').forEach(btn => {
     btn.addEventListener('click', () => openReclamoModal(Number(btn.dataset.viewReclamo)));
   });
+  body.querySelectorAll('[data-delete-reclamo]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      deleteComplaint(Number(btn.dataset.deleteReclamo));
+    });
+  });
+  body.querySelectorAll('.reclamo-check').forEach(chk => {
+    chk.addEventListener('change', () => {
+      const id = Number(chk.dataset.id);
+      if (chk.checked) selectedReclamoIds.add(id); else selectedReclamoIds.delete(id);
+      updateReclamoBulkBar();
+      updateSelectAllReclamosState(list);
+    });
+  });
+
+  updateSelectAllReclamosState(list);
 }
 document.getElementById('filterReclamoEstado').addEventListener('change', renderComplaints);
+document.getElementById('selectAllReclamos').addEventListener('change', function(){
+  const filterEl = document.getElementById('filterReclamoEstado');
+  const filter = filterEl.value;
+  const list = filter ? complaints.filter(c => c.estado === filter) : complaints;
+  const checked = this.checked;
+  list.forEach(c => { if (checked) selectedReclamoIds.add(c.id); else selectedReclamoIds.delete(c.id); });
+  renderComplaints();
+});
+async function deleteComplaint(id){
+  const c = complaints.find(x => x.id === id);
+  if (!c) return false;
+  if (!confirm(`¿Eliminar el reclamo/queja folio ${folioFor(c)} de "${c.nombre_completo}"? Esta acción no se puede deshacer.`)) return false;
+  try {
+    await restRequest('DELETE', 'complaints_book', { query: `?id=eq.${id}` });
+    selectedReclamoIds.delete(id);
+    await loadAll();
+    return true;
+  } catch (err) {
+    alert('No se pudo eliminar: ' + err.message);
+    return false;
+  }
+}
+async function deleteSelectedComplaints(){
+  const ids = Array.from(selectedReclamoIds);
+  if (ids.length === 0) return;
+  if (!confirm(`¿Eliminar ${ids.length} reclamo${ids.length === 1 ? '' : 's'} seleccionado${ids.length === 1 ? '' : 's'}? Esta acción no se puede deshacer.`)) return;
+  try {
+    await restRequest('DELETE', 'complaints_book', { query: `?id=in.(${ids.join(',')})` });
+    selectedReclamoIds.clear();
+    await loadAll();
+  } catch (err) {
+    alert('No se pudo eliminar: ' + err.message);
+  }
+}
+document.getElementById('btnDeleteSelectedReclamos').addEventListener('click', deleteSelectedComplaints);
 
 let editingReclamoId = null;
 const reclamoOverlay = document.getElementById('reclamoOverlay');
@@ -1179,6 +1262,11 @@ function openReclamoModal(id){
 }
 function closeReclamoModal(){ reclamoOverlay.classList.remove('open'); }
 document.getElementById('btnCancelReclamo').addEventListener('click', closeReclamoModal);
+document.getElementById('btnDeleteReclamo').addEventListener('click', async () => {
+  if (editingReclamoId == null) return;
+  const ok = await deleteComplaint(editingReclamoId);
+  if (ok) closeReclamoModal();
+});
 document.getElementById('btnSaveReclamo').addEventListener('click', async () => {
   if (editingReclamoId == null) return;
   const errEl = document.getElementById('reclamoError');
