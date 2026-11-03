@@ -2,12 +2,21 @@ name: Mantener despierta la base de datos (Supabase)
 
 # Este workflow no hace nada visible en tu web: solo le hace una consulta muy
 # liviana a la base de datos de Supabase una vez al día para que el plan
-# gratuito nunca la marque como "inactiva" y la pause. Es gratis, automático,
-# y no necesitas tocar nada después de subir este archivo una sola vez.
+# gratuito nunca la marque como "inactiva" y la pause.
+#
+# Además, GitHub desactiva automáticamente los workflows programados cuando el
+# repositorio pasa 60 días sin actividad (sin commits). Para que eso no
+# ocurra aunque dejes de subir cambios, el segundo paso de este workflow le
+# pide a GitHub (por su API, sin crear commits) que vuelva a "habilitar" este
+# mismo workflow en cada ejecución, lo que reinicia ese contador de 60 días.
 "on":
   schedule:
     - cron: '0 9 * * *'   # todos los días a las 9:00 UTC (madrugada en Perú)
   workflow_dispatch: {}    # también puedes ejecutarlo manualmente desde la pestaña "Actions" de GitHub
+
+permissions:
+  actions: write           # necesario para que el workflow pueda re-habilitarse a sí mismo
+  contents: read
 
 jobs:
   ping-supabase:
@@ -15,6 +24,19 @@ jobs:
     steps:
       - name: Consultar la base de datos (mantiene el proyecto activo)
         run: |
-          curl -s -o /dev/null -w "Respuesta de Supabase: %{http_code}\n" \
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
             -H "apikey: sb_publishable_TywPnO-iX4NKcJuUXBO6jQ_xorjibTI" \
-            "https://uukwnfydriezpswnabln.supabase.co/rest/v1/categories?select=id&limit=1"
+            "https://uukwnfydriezpswnabln.supabase.co/rest/v1/categories?select=id&limit=1")
+          echo "Respuesta de Supabase: $code"
+          # Si la base no responde bien (por ejemplo, está pausada), el workflow
+          # falla a propósito para que GitHub te avise por correo.
+          if [ "$code" != "200" ]; then exit 1; fi
+
+      - name: Reiniciar el contador de 60 días de GitHub (re-habilitar este workflow)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --method PUT \
+            "repos/${{ github.repository }}/actions/workflows/keep-supabase-alive.yml/enable"
+          echo "Workflow re-habilitado: el contador de inactividad se reinició."
