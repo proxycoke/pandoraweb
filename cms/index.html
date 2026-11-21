@@ -232,6 +232,7 @@ button:disabled{opacity:.45;cursor:not-allowed;}
 .pf-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px;}
 .pf-totals{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:16px;}
 .pf-totals div{display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:14px;}
+.pf-totals div span:last-child{white-space:nowrap;}
 .pf-totals .pf-saldo{border-top:1px solid var(--border);margin-top:6px;padding-top:8px;font-size:16px;font-weight:800;color:var(--pink-dark);}
 .pf-error{color:#b91c1c;font-size:13px;margin:10px 0 0;min-height:18px;font-weight:600;}
 .pf-ok{color:#047857;font-size:13px;margin:6px 0 0;min-height:18px;font-weight:600;word-break:break-word;}
@@ -261,10 +262,16 @@ button:disabled{opacity:.45;cursor:not-allowed;}
 .pf-sum-dates{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
 .pf-sum-dates .pf-field{flex:0 1 260px;min-width:0;margin:0;}
 .pf-sum-dates .pf-field[hidden]{display:none;}
+.pf-sum-dates .btn-primary{flex:0 0 auto;min-height:42px;}
+.pf-sum-list{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:6px;}
+.pf-sum-list li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;font-size:13px;padding:8px 12px;border:1px solid var(--border);border-radius:10px;}
+.pf-sum-list li span{color:var(--gray);}
 .pf-sum-table{width:100%;border-collapse:collapse;font-size:14px;}
 .pf-sum-table th{background:var(--black);color:#fff;text-align:left;padding:9px 12px;font-size:12.5px;}
 .pf-sum-table th:last-child,.pf-sum-table td:last-child{text-align:right;}
-.pf-sum-table td{padding:9px 12px;border-bottom:1px solid var(--border);overflow-wrap:anywhere;}
+.pf-sum-table td{padding:9px 12px;border-bottom:1px solid var(--border);overflow-wrap:break-word;}
+.pf-sum-table th:last-child,.pf-sum-table td:last-child{width:1%;white-space:nowrap;}
+.pf-sum-table th:last-child{white-space:normal;min-width:78px;}
 .pf-sum-meta{font-size:13px;color:var(--gray);margin:10px 0 0;}
 .pf-view-img{display:block;width:100%;height:auto;border-radius:8px;border:1px solid var(--border);}
 @media (max-width:1000px){ .pf-layout{grid-template-columns:minmax(0,1fr);} }
@@ -274,6 +281,21 @@ button:disabled{opacity:.45;cursor:not-allowed;}
   .pf-s-actions button{flex:1 1 auto;}
   .pf-saved-filters input{min-width:0;flex:1 1 100%;}
   .pf-saved-filters select{flex:1 1 100%;}
+}
+/* Celulares: letra de 16px en los campos (si es menor, el iPhone hace zoom al tocar y no vuelve),
+   botones y casillas de al menos 44 px de alto para tocar con el dedo, y encabezado que no se queda fijo
+   (ocupaba hasta la mitad de la pantalla y más aún con el teclado abierto). */
+@media (max-width:640px), (max-height:500px) and (pointer:coarse){
+  header.top{position:static;}
+}
+@media (max-width:640px), (pointer:coarse){
+  #tab-proforma input:not([type=checkbox]),#tab-proforma textarea,#tab-proforma select{font-size:16px;}
+  #tab-proforma .pf-field input,#tab-proforma .pf-field select,#tab-proforma .pf-item input,#tab-proforma .pf-saved-filters input,#tab-proforma .pf-saved-filters select{min-height:44px;}
+  #tab-proforma button{min-height:44px;}
+  #tab-proforma .pf-del{width:44px;height:44px;}
+  #tab-proforma .pf-deliv{min-height:44px;}
+  #tab-proforma .pf-deliv input{width:24px;height:24px;}
+  #tab-proforma .pf-s-actions button{min-width:44px;}
 }
 @media (max-width:640px){
   .pf-card{padding:14px;}
@@ -626,6 +648,7 @@ button:disabled{opacity:.45;cursor:not-allowed;}
             <label for="pfSumTo">Hasta</label>
             <input type="date" id="pfSumTo">
           </div>
+          <button type="button" class="btn-primary" id="btnPfSumSearch">Buscar</button>
         </div>
         <p class="pf-error" id="pfSumRangeErr" role="alert" style="margin-top:8px;"></p>
         <div id="pfSummaryBody" style="margin-top:14px;"></div>
@@ -1938,18 +1961,30 @@ function pfReset(){
   pfEl('pfSearch').addEventListener('input', pfRenderSaved);
   pfEl('pfFilter').addEventListener('change', pfRenderSaved);
   pfEl('pfSumDate').value = pfToday();
+  // El resumen solo se calcula al pulsar "Buscar"; si cambian las fechas, se limpia el resultado anterior.
+  const sumReset = () => { pfSumQuery = null; pfEl('pfSumRangeErr').textContent = ''; pfRenderSummary(); };
   pfEl('pfSumDate').addEventListener('change', () => {
-    // En modo rango, si "Desde" pasa a "Hasta", se acerca "Hasta" para no dejar un rango inválido.
     if (pfEl('pfSumRange').checked && pfEl('pfSumDate').value && pfEl('pfSumTo').value < pfEl('pfSumDate').value) pfEl('pfSumTo').value = pfEl('pfSumDate').value;
     pfEl('pfSumTo').min = pfEl('pfSumDate').value || '';
-    pfRenderSummary();
+    sumReset();
   });
-  pfEl('pfSumTo').addEventListener('change', pfRenderSummary);
+  pfEl('pfSumTo').addEventListener('change', sumReset);
   pfEl('pfSumRange').addEventListener('change', () => {
     const on = pfEl('pfSumRange').checked;
     pfEl('pfSumToWrap').hidden = !on;
     pfEl('pfSumDateLabel').textContent = on ? 'Desde' : 'Delivery programado el';
     if (on) { pfEl('pfSumTo').value = pfEl('pfSumDate').value; pfEl('pfSumTo').min = pfEl('pfSumDate').value || ''; }
+    sumReset();
+  });
+  pfEl('btnPfSumSearch').addEventListener('click', () => {
+    const range = pfEl('pfSumRange').checked;
+    const from = pfEl('pfSumDate').value;
+    const to = range ? pfEl('pfSumTo').value : from;
+    const err = pfEl('pfSumRangeErr');
+    err.textContent = '';
+    if (!from || (range && !to)) { pfSumQuery = null; err.textContent = range ? 'Elige las fechas "Desde" y "Hasta".' : 'Elige una fecha.'; pfRenderSummary(); return; }
+    if (to < from) { pfSumQuery = null; err.textContent = 'La fecha "Hasta" no puede ser anterior a la fecha "Desde".'; pfRenderSummary(); return; }
+    pfSumQuery = { from, to, range };
     pfRenderSummary();
   });
   const savedList = pfEl('pfSavedList');
@@ -2103,28 +2138,20 @@ function pfLocalDate(iso){
   if (isNaN(d)) return '';
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
+let pfSumQuery = null;   // { from, to, range } de la última búsqueda; null = aún no se buscó
 function pfRenderSummary(){
   const body = pfEl('pfSummaryBody');
   if (!body) return;
   if (pfLoadError) { body.innerHTML = ''; return; }
-  const range = pfEl('pfSumRange').checked;
-  const from = pfEl('pfSumDate').value;
-  const to = range ? pfEl('pfSumTo').value : from;
-  const rangeErr = pfEl('pfSumRangeErr');
-  rangeErr.textContent = '';
-  if (!from || (range && !to)) { body.innerHTML = '<p class="hint">Elige ' + (range ? 'las fechas "Desde" y "Hasta".' : 'una fecha.') + '</p>'; return; }
-  if (to < from) {
-    rangeErr.textContent = 'La fecha "Hasta" no puede ser anterior a la fecha "Desde".';
-    body.innerHTML = '';
-    return;
-  }
+  const q = pfSumQuery;
+  if (!q) { body.innerHTML = '<p class="hint">Elige la fecha y pulsa <strong>Buscar</strong> para ver las proformas.</p>'; return; }
   const list = pfProformas.filter(p => {
     if (!p.programado_delivery || !p.delivery_marcado_at) return false;
     const d = pfLocalDate(p.delivery_marcado_at);
-    return d >= from && d <= to;
-  });
+    return d >= q.from && d <= q.to;
+  }).sort((x, y) => String(x.delivery_marcado_at).localeCompare(String(y.delivery_marcado_at)));
   if (!list.length) {
-    body.innerHTML = '<p class="hint">No hay proformas con delivery programado ' + (range ? 'en ese rango de fechas.' : 'en esa fecha.') + '</p>';
+    body.innerHTML = '<p class="hint" style="font-weight:700;">No hay proformas generadas para ' + (q.range ? 'este rango de fechas.' : 'esta fecha.') + '</p>';
     return;
   }
   const agg = new Map();
@@ -2142,8 +2169,10 @@ function pfRenderSummary(){
     '<table class="pf-sum-table"><thead><tr><th>Producto</th><th>Cantidad a descontar</th></tr></thead><tbody>' +
     rows.map(r => '<tr><td>' + escapeHtml(r.name) + '</td><td><strong>' + r.qty + '</strong></td></tr>').join('') +
     '</tbody></table>' +
-    '<p class="pf-sum-meta">' + list.length + ' proforma' + (list.length === 1 ? '' : 's') + ': ' +
-    list.map(p => escapeHtml(p.nro)).join(', ') + ' · ' + units + ' unidades · Saldo por cobrar: <strong>' + pfMoney(saldo) + '</strong></p>';
+    '<p class="pf-sum-meta">' + list.length + ' proforma' + (list.length === 1 ? '' : 's') + ' · ' + units + ' unidades · Saldo por cobrar: <strong>' + pfMoney(saldo) + '</strong></p>' +
+    '<ul class="pf-sum-list">' + list.map(p =>
+      '<li><strong>' + escapeHtml(p.nro) + ' · ' + escapeHtml(p.cliente) + '</strong><span>Total ' + pfMoney(p.total) + ' · Saldo ' + pfMoney(p.saldo) + '</span></li>'
+    ).join('') + '</ul>';
 }
 
 async function pfToggleDelivery(id, checked, chk){
