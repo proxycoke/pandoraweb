@@ -206,6 +206,87 @@ button:disabled{opacity:.45;cursor:not-allowed;}
 }
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
 @keyframes spin{to{transform:rotate(360deg);}}
+
+/* ===== Proforma ===== */
+.tabs{flex-wrap:wrap;}
+.pf-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start;}
+.pf-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;min-width:0;}
+.pf-card h3{margin:0 0 14px;font-size:16px;color:var(--pink-dark);}
+.pf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.pf-field{display:flex;flex-direction:column;min-width:0;}
+.pf-field.full{grid-column:1/-1;}
+.pf-field label{font-size:12.5px;font-weight:700;margin-bottom:5px;color:var(--gray);}
+.pf-field input,.pf-field textarea,.pf-item input{
+  width:100%;min-width:0;padding:10px 12px;border-radius:8px;border:1px solid var(--border);
+  font-size:14px;font-family:inherit;color:var(--black);background:#fff;
+}
+.pf-field input:focus,.pf-field textarea:focus,.pf-item input:focus{outline:2px solid var(--pink);outline-offset:0;border-color:var(--pink);}
+.pf-field textarea{resize:vertical;min-height:70px;}
+.pf-items-head,.pf-item{display:grid;grid-template-columns:minmax(0,1fr) 72px 104px 98px 38px;gap:8px;align-items:center;}
+.pf-items-head{font-size:12px;font-weight:700;color:var(--gray);margin:18px 0 6px;}
+.pf-items-head span:nth-child(3),.pf-items-head span:nth-child(4){text-align:right;}
+.pf-item{margin-bottom:8px;}
+.pf-sub{text-align:right;font-weight:700;font-size:14px;white-space:nowrap;}
+.pf-del{padding:0;width:38px;height:38px;display:flex;align-items:center;justify-content:center;}
+.pf-mini{display:none;font-size:11.5px;font-weight:700;color:var(--gray);margin-bottom:3px;}
+.pf-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px;}
+.pf-totals{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:16px;}
+.pf-totals div{display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:14px;}
+.pf-totals .pf-saldo{border-top:1px solid var(--border);margin-top:6px;padding-top:8px;font-size:16px;font-weight:800;color:var(--pink-dark);}
+.pf-error{color:#b91c1c;font-size:13px;margin:10px 0 0;min-height:18px;font-weight:600;}
+.pf-ok{color:#047857;font-size:13px;margin:6px 0 0;min-height:18px;font-weight:600;word-break:break-word;}
+.pf-warn{color:#b45309;font-size:12.5px;margin:6px 0 0;font-weight:600;}
+.pf-canvas{display:block;width:100%;height:auto;border-radius:8px;border:1px solid var(--border);background:#fff;}
+.pf-saved-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;}
+.pf-saved-head h3{margin:0;}
+.pf-count{font-size:12px;font-weight:700;color:var(--gray);margin-left:6px;}
+.pf-saved-filters{display:flex;gap:8px;flex-wrap:wrap;}
+.pf-saved-filters input,.pf-saved-filters select,.pf-field input[type=date]{padding:9px 12px;border-radius:8px;border:1px solid var(--border);font-size:13.5px;font-family:inherit;color:var(--black);background:#fff;}
+.pf-saved-filters input{min-width:200px;}
+.pf-saved-row{display:grid;grid-template-columns:170px minmax(0,1fr) 210px auto;gap:14px;align-items:center;padding:12px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:#fff;}
+.pf-saved-row.is-delivery{background:#f0fdf4;border-color:#bbf7d0;}
+.pf-deliv{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--black);cursor:pointer;line-height:1.25;}
+.pf-deliv input{width:20px;height:20px;accent-color:#16a34a;cursor:pointer;flex-shrink:0;}
+.pf-s-top{font-size:14px;color:var(--gray);}
+.pf-s-top strong{color:var(--pink-dark);font-size:15px;}
+.pf-s-client{font-weight:700;font-size:15px;margin:2px 0;overflow-wrap:anywhere;}
+.pf-s-items{font-size:12.5px;color:var(--gray);overflow-wrap:anywhere;}
+.pf-badge{display:inline-block;background:#dcfce7;color:#166534;border-radius:20px;padding:1px 9px;font-size:11px;font-weight:800;margin-left:6px;vertical-align:middle;}
+.pf-s-money{font-size:13px;}
+.pf-s-money div{display:flex;justify-content:space-between;gap:10px;}
+.pf-s-money small{color:var(--gray);font-weight:600;}
+.pf-s-saldo{font-weight:800;color:var(--pink-dark);border-top:1px solid var(--border);margin-top:3px;padding-top:3px;}
+.pf-s-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.pf-s-actions button{padding:7px 11px;font-size:12.5px;}
+.pf-sum-dates{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+.pf-sum-dates .pf-field{flex:0 1 260px;min-width:0;margin:0;}
+.pf-sum-dates .pf-field[hidden]{display:none;}
+.pf-sum-table{width:100%;border-collapse:collapse;font-size:14px;}
+.pf-sum-table th{background:var(--black);color:#fff;text-align:left;padding:9px 12px;font-size:12.5px;}
+.pf-sum-table th:last-child,.pf-sum-table td:last-child{text-align:right;}
+.pf-sum-table td{padding:9px 12px;border-bottom:1px solid var(--border);overflow-wrap:anywhere;}
+.pf-sum-meta{font-size:13px;color:var(--gray);margin:10px 0 0;}
+.pf-view-img{display:block;width:100%;height:auto;border-radius:8px;border:1px solid var(--border);}
+@media (max-width:1000px){ .pf-layout{grid-template-columns:minmax(0,1fr);} }
+@media (max-width:900px){
+  .pf-saved-row{grid-template-columns:minmax(0,1fr);gap:10px;}
+  .pf-s-actions{justify-content:flex-start;}
+  .pf-s-actions button{flex:1 1 auto;}
+  .pf-saved-filters input{min-width:0;flex:1 1 100%;}
+  .pf-saved-filters select{flex:1 1 100%;}
+}
+@media (max-width:640px){
+  .pf-card{padding:14px;}
+  .pf-grid{grid-template-columns:minmax(0,1fr);}
+  .pf-items-head{display:none;}
+  .pf-item{grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:10px;border:1px solid var(--border);border-radius:10px;background:#fff9fc;gap:8px 10px;}
+  .pf-item .pf-prod{grid-column:1/-1;}
+  .pf-mini{display:block;}
+  .pf-sub-wrap{grid-column:1;align-self:end;}
+  .pf-sub{text-align:left;font-size:15px;}
+  .pf-del{grid-column:2;justify-self:end;align-self:end;}
+  .pf-actions button{flex:1 1 100%;}
+}
 </style>
 </head>
 <body>
@@ -253,6 +334,7 @@ button:disabled{opacity:.45;cursor:not-allowed;}
       <button class="tab-btn" data-tab="importacion">📦 Importación masiva</button>
       <button class="tab-btn" data-tab="seo">🔍 SEO</button>
       <button class="tab-btn" data-tab="reclamos">📖 Reclamos<span id="reclamosBadge" class="reclamos-badge" style="display:none;"></span></button>
+      <button class="tab-btn" data-tab="proforma">🧾 Proforma</button>
     </div>
 
     
@@ -439,6 +521,127 @@ button:disabled{opacity:.45;cursor:not-allowed;}
       </table>
       <div class="empty-msg" id="reclamosEmpty" style="display:none;">No hay reclamos ni quejas registrados todavía.</div>
     </section>
+
+
+    <section id="tab-proforma" style="display:none;">
+      <p class="hint" style="margin-bottom:14px;font-size:13px;">
+        Completa los datos y pulsa <strong>Generar proforma</strong>: se descarga una imagen <strong>.jpeg</strong>
+        lista para enviar al cliente por WhatsApp o Facebook Marketplace, y la proforma queda guardada abajo en <strong>Proformas guardadas</strong>.
+      </p>
+      <div class="pf-layout">
+        <div class="pf-card">
+          <h3>Datos de la proforma</h3>
+          <div class="pf-grid">
+            <div class="pf-field">
+              <label for="pfNro">N° de proforma</label>
+              <input type="text" id="pfNro" maxlength="20" autocomplete="off">
+            </div>
+            <div class="pf-field">
+              <label for="pfFecha">Fecha</label>
+              <input type="date" id="pfFecha">
+            </div>
+            <div class="pf-field full">
+              <label for="pfCliente">Nombre del cliente *</label>
+              <input type="text" id="pfCliente" maxlength="80" autocomplete="off" placeholder="Ej: María Pérez">
+            </div>
+            <div class="pf-field">
+              <label for="pfValidez">Validez de los precios (días)</label>
+              <input type="number" id="pfValidez" min="0" max="365" step="1" inputmode="numeric" value="7">
+            </div>
+          </div>
+
+          <div class="pf-items-head">
+            <span>Producto</span><span>Cant.</span><span>Precio unit. (S/)</span><span>Subtotal</span><span></span>
+          </div>
+          <div id="pfItems"></div>
+          <datalist id="pfProductList"></datalist>
+          <button type="button" class="btn-outline" id="btnPfAddRow">+ Agregar producto</button>
+
+          <div class="pf-grid" style="margin-top:16px;">
+            <div class="pf-field">
+              <label for="pfAdelanto">Adelanto (S/)</label>
+              <input type="number" id="pfAdelanto" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="pf-field full">
+              <label for="pfObs">Observaciones (opcional)</label>
+              <textarea id="pfObs" maxlength="400" placeholder="Ej: Envío por Olva, entrega en 2 días hábiles. Pago por Yape o transferencia."></textarea>
+            </div>
+          </div>
+
+          <div class="pf-totals" aria-live="polite">
+            <div><span>Total</span><strong id="pfSumTotal">S/ 0.00</strong></div>
+            <div><span>Adelanto</span><strong id="pfSumAdv">S/ 0.00</strong></div>
+            <div class="pf-saldo"><span>Saldo a pagar</span><span id="pfSumSaldo">S/ 0.00</span></div>
+          </div>
+          <p class="pf-warn" id="pfWarn" style="display:none;"></p>
+
+          <div class="pf-actions">
+            <button type="button" class="btn-primary" id="btnPfGenerate">Generar proforma</button>
+            <button type="button" class="btn-outline" id="btnPfReset">Nueva proforma</button>
+          </div>
+          <p class="pf-error" id="pfError" role="alert"></p>
+          <p class="pf-ok" id="pfStatus"></p>
+        </div>
+
+        <div class="pf-card">
+          <h3>Vista previa</h3>
+          <canvas id="pfCanvas" class="pf-canvas" width="1080" height="800"></canvas>
+          <p class="hint">Así se verá la imagen descargada (se genera en mayor resolución).</p>
+        </div>
+      </div>
+
+      <div class="pf-card" id="pfSavedCard" style="margin-top:20px;">
+        <div class="pf-saved-head">
+          <h3>Proformas guardadas <span class="pf-count" id="pfSavedCount"></span></h3>
+          <div class="pf-saved-filters">
+            <input type="text" id="pfSearch" placeholder="Buscar por cliente o N°" maxlength="60" autocomplete="off">
+            <select id="pfFilter">
+              <option value="">Todas</option>
+              <option value="si">Con delivery programado</option>
+              <option value="no">Sin programar</option>
+            </select>
+          </div>
+        </div>
+        <p class="pf-error" id="pfSavedError" role="alert"></p>
+        <div id="pfSavedList"></div>
+        <div class="empty-msg" id="pfSavedEmpty" style="display:none;">Todavía no hay proformas guardadas. Cada proforma que generes aparecerá aquí.</div>
+      </div>
+
+      <div class="pf-card" id="pfSummaryCard" style="margin-top:20px;">
+        <h3>Resumen para descontar del inventario</h3>
+        <p class="hint" style="margin-bottom:10px;">
+          Productos de las proformas marcadas como <strong>Programado delivery</strong> en la fecha elegida.
+          Úsalo al final del día para restar el stock a mano.
+        </p>
+        <label class="pf-deliv" for="pfSumRange" style="margin-bottom:12px;width:fit-content;">
+          <input type="checkbox" id="pfSumRange">
+          <span>Rango fechas</span>
+        </label>
+        <div class="pf-sum-dates">
+          <div class="pf-field">
+            <label for="pfSumDate" id="pfSumDateLabel">Delivery programado el</label>
+            <input type="date" id="pfSumDate">
+          </div>
+          <div class="pf-field" id="pfSumToWrap" hidden>
+            <label for="pfSumTo">Hasta</label>
+            <input type="date" id="pfSumTo">
+          </div>
+        </div>
+        <p class="pf-error" id="pfSumRangeErr" role="alert" style="margin-top:8px;"></p>
+        <div id="pfSummaryBody" style="margin-top:14px;"></div>
+      </div>
+    </section>
+
+    <div class="overlay" id="pfViewOverlay">
+      <div class="modal modal-wide" style="max-width:720px;">
+        <h3 id="pfViewTitle" style="margin-bottom:12px;">Proforma</h3>
+        <canvas id="pfViewCanvas" class="pf-view-img" width="1080" height="800"></canvas>
+        <div class="modal-actions">
+          <button class="btn-outline" id="btnPfViewClose">Cerrar</button>
+          <button class="btn-primary" id="btnPfViewDownload">⬇️ Descargar .jpeg</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -680,6 +883,8 @@ let products = [];
 let slides = [];
 let complaints = [];
 let selectedReclamoIds = new Set();
+let pfProformas = [];
+let pfLoadError = '';
 let importFilterIds = null; 
 let accessToken = null;
 let refreshToken = null;
@@ -994,17 +1199,22 @@ document.getElementById('btnLogout').addEventListener('click', () => {
 let siteSettings = { maintenance_enabled: false, maintenance_message: '' };
 
 async function loadAll(){
-  const [cats, prods, slds, settingsRows, compls] = await Promise.all([
+  const [cats, prods, slds, settingsRows, compls, pfRes] = await Promise.all([
     restRequest('GET', 'categories', { query: '?select=*&order=sort_order.asc' }),
     restRequest('GET', 'products', { query: '?select=*&order=sort_order.asc' }),
     restRequest('GET', 'hero_slides', { query: '?select=*&order=sort_order.asc' }).catch(() => []),
     restRequest('GET', 'site_settings', { query: '?select=*&id=eq.1' }).catch(() => []),
     restRequest('GET', 'complaints_book', { query: '?select=*&order=created_at.desc' }).catch(() => []),
+    restRequest('GET', 'proformas', { query: '?select=*&order=created_at.desc&limit=500' })
+      .then(rows => ({ rows: rows || [] }))
+      .catch(err => ({ rows: [], error: err.message || 'Error' })),
   ]);
   categories = cats;
   products = prods;
   slides = slds;
   complaints = compls || [];
+  pfProformas = pfRes.rows;
+  pfLoadError = pfRes.error || '';
   if (settingsRows && settingsRows[0]) siteSettings = settingsRows[0];
   document.getElementById('importBox').style.display = (categories.length === 0 && products.length === 0) ? 'block' : 'none';
   renderAll();
@@ -1024,6 +1234,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.getElementById('tab-importacion').style.display = btn.dataset.tab === 'importacion' ? 'block' : 'none';
     document.getElementById('tab-seo').style.display = btn.dataset.tab === 'seo' ? 'block' : 'none';
     document.getElementById('tab-reclamos').style.display = btn.dataset.tab === 'reclamos' ? 'block' : 'none';
+    document.getElementById('tab-proforma').style.display = btn.dataset.tab === 'proforma' ? 'block' : 'none';
     localStorage.setItem(ACTIVE_TAB_KEY, btn.dataset.tab);
     if (leavingImportTab && !suppressImportReset) resetImportForm();
     suppressImportReset = false;
@@ -1099,6 +1310,8 @@ function renderAll(){
   renderSlides();
   renderMaintenance();
   renderComplaints();
+  pfRefreshCatalog();
+  pfRenderSaved();
   document.getElementById('statusPill').textContent = `${products.length} productos · ${categories.length} categorías · ${slides.length} diapositivas`;
 }
 
@@ -1234,6 +1447,758 @@ async function deleteSelectedComplaints(){
   }
 }
 document.getElementById('btnDeleteSelectedReclamos').addEventListener('click', deleteSelectedComplaints);
+
+
+// ============================================================
+// PROFORMA: arma una imagen .jpeg con los datos que escribe el usuario.
+// Todo ocurre en el navegador (canvas); no se guarda nada en la base de datos.
+// Los textos se dibujan en el canvas (no se insertan como HTML), así que lo
+// que escriba el usuario nunca se interpreta como código.
+// ============================================================
+const PF_NEXT_KEY = 'pb_cms_proforma_next';
+const PF_MAX_ITEMS = 20;
+const PF_FONT = '"Segoe UI", "Helvetica Neue", Arial, sans-serif';
+const pfEl = id => document.getElementById(id);
+
+function pfToday(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function pfStoredNext(){
+  try { return parseInt(localStorage.getItem(PF_NEXT_KEY), 10) || 1; } catch (e) { return 1; }
+}
+function pfNextNumber(){
+  // El siguiente número sale del mayor ya guardado en la base (si hay), o del contador de este navegador.
+  let max = 0;
+  (pfProformas || []).forEach(p => {
+    const m = /^PF-(\d+)$/i.exec((p.nro || '').trim());
+    if (m) max = Math.max(max, parseInt(m[1], 10));
+  });
+  return 'PF-' + String(Math.max(pfStoredNext(), max + 1)).padStart(4, '0');
+}
+// Imagen descargada: 1.5x (1620 px de ancho) y calidad JPEG 0.72. A simple vista se ve igual de nítida que a
+// 2x/0.92, pero pesa ~55 % menos (≈150 KB en vez de ≈360 KB).
+const PF_EXPORT_SCALE = 1.5;
+const PF_EXPORT_QUALITY = 0.72;
+function pfBumpNumber(used){
+  const m = /^PF-(\d+)$/i.exec((used || '').trim());
+  if (!m) return;
+  try { localStorage.setItem(PF_NEXT_KEY, String(Math.max(pfStoredNext(), parseInt(m[1], 10) + 1))); } catch (e) {}
+}
+function pfRound(n){ return Math.round((n + Number.EPSILON) * 100) / 100; }
+function pfMoney(n){
+  return 'S/ ' + Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function pfFormatDate(iso){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+  return m ? m[3] + '/' + m[2] + '/' + m[1] : '';
+}
+function pfAddDays(iso, days){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+  if (!m) return '';
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  d.setDate(d.getDate() + days);
+  return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
+}
+
+function pfRefreshCatalog(){
+  const dl = pfEl('pfProductList');
+  if (!dl) return;
+  dl.innerHTML = '';
+  (products || []).forEach(p => {
+    const o = document.createElement('option');
+    o.value = p.name;
+    dl.appendChild(o);
+  });
+}
+
+function pfAddRow(values){
+  const wrap = pfEl('pfItems');
+  if (wrap.children.length >= PF_MAX_ITEMS) return null;
+  const row = document.createElement('div');
+  row.className = 'pf-item';
+  row.innerHTML =
+    '<div class="pf-prod"><span class="pf-mini">Producto</span><input type="text" class="pf-in-name" maxlength="120" placeholder="Ej: Vela LED mediana" list="pfProductList" autocomplete="off"></div>' +
+    '<div class="pf-qty"><span class="pf-mini">Cantidad</span><input type="number" class="pf-in-qty" min="1" step="1" inputmode="numeric" value="1"></div>' +
+    '<div class="pf-price"><span class="pf-mini">Precio unit. (S/)</span><input type="number" class="pf-in-price" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></div>' +
+    '<div class="pf-sub-wrap"><span class="pf-mini">Subtotal</span><div class="pf-sub">S/ 0.00</div></div>' +
+    '<button type="button" class="btn-danger pf-del" title="Quitar este producto" aria-label="Quitar este producto">✕</button>';
+  wrap.appendChild(row);
+  if (values) {
+    row.querySelector('.pf-in-name').value = values.name || '';
+    row.querySelector('.pf-in-qty').value = values.qty != null ? values.qty : 1;
+    row.querySelector('.pf-in-price').value = values.price != null ? values.price : '';
+  }
+  return row;
+}
+
+function pfReadData(){
+  const rows = Array.from(pfEl('pfItems').querySelectorAll('.pf-item')).map((r, idx) => {
+    const name = r.querySelector('.pf-in-name').value.trim();
+    const qtyRaw = r.querySelector('.pf-in-qty').value.trim();
+    const priceRaw = r.querySelector('.pf-in-price').value.trim();
+    const qty = parseFloat(qtyRaw);
+    const price = parseFloat(priceRaw);
+    const q = isFinite(qty) ? qty : 0;
+    const p = isFinite(price) ? price : 0;
+    return {
+      pos: idx + 1, el: r, name, qtyRaw, priceRaw, qty: q, price: p,
+      empty: !name && !priceRaw,
+      sub: pfRound(q * p),
+    };
+  });
+  const items = rows.filter(r => !r.empty);
+  const total = pfRound(items.reduce((a, i) => a + i.sub, 0));
+  const advRaw = pfEl('pfAdelanto').value.trim();
+  const advNum = parseFloat(advRaw);
+  const adelanto = isFinite(advNum) ? pfRound(advNum) : 0;
+  const validezRaw = pfEl('pfValidez').value.trim();
+  const validezNum = parseInt(validezRaw, 10);
+  return {
+    rows, items, total, advRaw, adelanto,
+    saldo: pfRound(total - adelanto),
+    nro: pfEl('pfNro').value.trim(),
+    fecha: pfEl('pfFecha').value,
+    cliente: pfEl('pfCliente').value.trim(),
+    validez: isFinite(validezNum) && validezNum > 0 ? validezNum : 0,
+    obs: pfEl('pfObs').value.trim(),
+  };
+}
+
+function pfValidate(d){
+  if (!d.nro) return 'Escribe el N° de proforma.';
+  if (!d.cliente) return 'Escribe el nombre del cliente.';
+  if (!d.fecha) return 'Elige la fecha de la proforma.';
+  if (d.items.length === 0) return 'Agrega al menos un producto con su precio.';
+  for (const it of d.items) {
+    if (!it.name) return 'Renglón ' + it.pos + ': falta el nombre del producto.';
+    if (!(it.qty >= 1) || !Number.isInteger(it.qty)) return 'Renglón ' + it.pos + ': la cantidad debe ser un número entero de 1 o más.';
+    if (!it.priceRaw || !(it.price > 0)) return 'Renglón ' + it.pos + ': el precio debe ser mayor que 0.';
+  }
+  if (d.advRaw && !(d.adelanto >= 0)) return 'El adelanto no puede ser negativo.';
+  if (d.adelanto > d.total) return 'El adelanto (' + pfMoney(d.adelanto) + ') no puede ser mayor que el total (' + pfMoney(d.total) + ').';
+  return '';
+}
+
+function pfWrapText(ctx, text, maxWidth){
+  const out = [];
+  String(text).split(/\r?\n/).forEach(par => {
+    const words = par.split(/\s+/).filter(Boolean);
+    if (!words.length) { out.push(''); return; }
+    let cur = '';
+    words.forEach(w => {
+      let word = w;
+      while (ctx.measureText(word).width > maxWidth) {
+        let cut = word.length;
+        while (cut > 1 && ctx.measureText(word.slice(0, cut)).width > maxWidth) cut--;
+        if (cur) { out.push(cur); cur = ''; }
+        out.push(word.slice(0, cut));
+        word = word.slice(cut);
+      }
+      const test = cur ? cur + ' ' + word : word;
+      if (ctx.measureText(test).width <= maxWidth) cur = test;
+      else { if (cur) out.push(cur); cur = word; }
+    });
+    if (cur) out.push(cur);
+  });
+  return out.length ? out : [''];
+}
+
+function pfFit(ctx, text, maxWidth){
+  let t = String(text);
+  if (ctx.measureText(t).width <= maxWidth) return t;
+  while (t.length > 1 && ctx.measureText(t + '…').width > maxWidth) t = t.slice(0, -1);
+  return t + '…';
+}
+
+// Dibuja la proforma en "canvas". scale = 1 (vista previa) o 2 (archivo descargado).
+function pfDraw(canvas, d, scale){
+  const W = 1080, M = 56, CW = W - M * 2;
+  const ctx = canvas.getContext('2d');
+  const font = (px, weight) => (weight || '400') + ' ' + px + 'px ' + PF_FONT;
+
+  // ---- 1) Medidas (se calculan antes de fijar el tamaño del canvas) ----
+  const clienteText = d.cliente || '—';
+  ctx.font = font(30, '700');
+  const clienteLines = pfWrapText(ctx, clienteText, 560).slice(0, 3);
+  const infoRows = Math.max(clienteLines.length * 36 + 30, 90);
+  const rightInfoH = d.validez > 0 ? 150 : 82;
+  const infoH = Math.max(infoRows, rightInfoH);
+
+  const colQty = 90, colPrice = 190, colSub = 190;
+  const colProd = CW - colQty - colPrice - colSub;
+  ctx.font = font(24, '600');
+  const shown = d.items.length ? d.items : [{ name: '—', qty: 0, price: 0, sub: 0, blank: true }];
+  const rows = shown.map(it => {
+    const lines = pfWrapText(ctx, it.name || '—', colProd - 40).slice(0, 4);
+    return { it, lines, h: Math.max(66, lines.length * 31 + 30) };
+  });
+  const rowsH = rows.reduce((a, r) => a + r.h, 0);
+
+  const totalsW = 500, totalsH = 56 + 56 + 92 + 8;
+  let obsLines = [], obsH = 0;
+  const obsW = CW - totalsW - 32;
+  if (d.obs) {
+    ctx.font = font(21, '400');
+    obsLines = pfWrapText(ctx, d.obs, obsW - 40).slice(0, 14);
+    obsH = 56 + obsLines.length * 28 + 20;
+  }
+  const bottomH = Math.max(totalsH, obsH);
+
+  const footTxt = (d.validez > 0
+    ? 'Precios válidos por ' + d.validez + (d.validez === 1 ? ' día' : ' días') + ' desde la fecha de emisión. '
+    : '') + 'Proforma informativa: no es comprobante de pago.';
+  ctx.font = font(18, '400');
+  const footLines = pfWrapText(ctx, footTxt, CW);
+  const footH = footLines.length * 26;
+
+  const HEADER = 150;
+  const H = HEADER + 44 + infoH + 30 + 58 + rowsH + 40 + bottomH + 40 + footH + 40;
+
+  // ---- 2) Dibujo ----
+  canvas.width = Math.round(W * scale);
+  canvas.height = Math.round(H * scale);
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  ctx.textBaseline = 'alphabetic';
+
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+
+  // Encabezado
+  const g = ctx.createLinearGradient(0, 0, W, HEADER);
+  g.addColorStop(0, '#ec1e79');
+  g.addColorStop(1, '#a8115a');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, HEADER);
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'left';
+  ctx.font = font(48, '800');
+  ctx.fillText('PANDORA IMPORT', M, 82);
+  ctx.font = font(22, '400');
+  ctx.fillStyle = 'rgba(255,255,255,.88)';
+  ctx.fillText('Proforma de venta', M, 118);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = 'rgba(255,255,255,.88)';
+  ctx.font = font(20, '600');
+  ctx.fillText('N° DE PROFORMA', W - M, 62);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = font(40, '800');
+  ctx.fillText(pfFit(ctx, d.nro || '—', 380), W - M, 108);
+
+  // Datos del cliente / fechas
+  let y = HEADER + 44;
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#6b7280';
+  ctx.font = font(16, '700');
+  ctx.fillText('CLIENTE', M, y + 14);
+  ctx.fillStyle = '#5b1049';
+  ctx.font = font(30, '700');
+  clienteLines.forEach((ln, i) => ctx.fillText(ln, M, y + 54 + i * 36));
+
+  const rx = W - M;
+  ctx.textAlign = 'right';
+  ctx.fillStyle = '#6b7280';
+  ctx.font = font(16, '700');
+  ctx.fillText('FECHA', rx, y + 14);
+  ctx.fillStyle = '#5b1049';
+  ctx.font = font(28, '700');
+  ctx.fillText(pfFormatDate(d.fecha) || '—', rx, y + 52);
+  if (d.validez > 0) {
+    ctx.fillStyle = '#6b7280';
+    ctx.font = font(16, '700');
+    ctx.fillText('VÁLIDA HASTA', rx, y + 96);
+    ctx.fillStyle = '#5b1049';
+    ctx.font = font(28, '700');
+    ctx.fillText(pfAddDays(d.fecha, d.validez) || '—', rx, y + 134);
+  }
+
+  // Tabla
+  y = HEADER + 44 + infoH + 30;
+  ctx.fillStyle = '#5b1049';
+  ctx.fillRect(M, y, CW, 58);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = font(19, '700');
+  ctx.textAlign = 'left';
+  ctx.fillText('PRODUCTO', M + 20, y + 37);
+  ctx.textAlign = 'center';
+  ctx.fillText('CANT.', M + colProd + colQty / 2, y + 37);
+  ctx.textAlign = 'right';
+  ctx.fillText('P. UNIT.', M + colProd + colQty + colPrice - 20, y + 37);
+  ctx.fillText('SUBTOTAL', M + CW - 20, y + 37);
+  y += 58;
+
+  rows.forEach((r, i) => {
+    ctx.fillStyle = i % 2 === 0 ? '#ffffff' : '#fff3f8';
+    ctx.fillRect(M, y, CW, r.h);
+    const padTop = (r.h - r.lines.length * 31) / 2;
+    ctx.fillStyle = '#3b0a2f';
+    ctx.font = font(24, '600');
+    ctx.textAlign = 'left';
+    r.lines.forEach((ln, k) => ctx.fillText(ln, M + 20, y + padTop + 23 + k * 31));
+    if (!r.it.blank) {
+      const cy = y + r.h / 2 + 8;
+      ctx.font = font(24, '500');
+      ctx.textAlign = 'center';
+      ctx.fillText(String(r.it.qty), M + colProd + colQty / 2, cy);
+      ctx.textAlign = 'right';
+      ctx.fillText(pfMoney(r.it.price), M + colProd + colQty + colPrice - 20, cy);
+      ctx.font = font(24, '700');
+      ctx.fillText(pfMoney(r.it.sub), M + CW - 20, cy);
+    }
+    y += r.h;
+  });
+  ctx.fillStyle = '#f3d9e8';
+  ctx.fillRect(M, y, CW, 3);
+
+  // Totales (derecha) y observaciones (izquierda)
+  y += 40;
+  const tx = W - M - totalsW;
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#5b1049';
+  ctx.font = font(26, '600');
+  ctx.fillText('Total', tx + 20, y + 36);
+  ctx.fillText('Adelanto', tx + 20, y + 56 + 36);
+  ctx.textAlign = 'right';
+  ctx.font = font(26, '700');
+  ctx.fillText(pfMoney(d.total), tx + totalsW - 20, y + 36);
+  ctx.fillText(pfMoney(d.adelanto), tx + totalsW - 20, y + 56 + 36);
+  ctx.fillStyle = '#f3d9e8';
+  ctx.fillRect(tx, y + 54, totalsW, 2);
+  const by = y + 56 + 56 + 8;
+  const sg = ctx.createLinearGradient(tx, by, tx + totalsW, by + 92);
+  sg.addColorStop(0, '#ec1e79');
+  sg.addColorStop(1, '#a8115a');
+  ctx.fillStyle = sg;
+  ctx.fillRect(tx, by, totalsW, 92);
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'left';
+  ctx.font = font(18, '700');
+  ctx.fillText('SALDO A PAGAR', tx + 20, by + 34);
+  ctx.textAlign = 'right';
+  ctx.font = font(42, '800');
+  ctx.fillText(pfMoney(d.saldo), tx + totalsW - 20, by + 74);
+
+  if (d.obs) {
+    ctx.fillStyle = '#fff3f8';
+    ctx.fillRect(M, y, obsW, obsH);
+    ctx.fillStyle = '#ec1e79';
+    ctx.fillRect(M, y, 6, obsH);
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#6b7280';
+    ctx.font = font(16, '700');
+    ctx.fillText('OBSERVACIONES', M + 24, y + 34);
+    ctx.fillStyle = '#3b0a2f';
+    ctx.font = font(21, '400');
+    obsLines.forEach((ln, i) => ctx.fillText(ln, M + 24, y + 70 + i * 28));
+  }
+  y += bottomH + 40;
+
+  // Pie
+  ctx.fillStyle = '#f3d9e8';
+  ctx.fillRect(M, y - 20, CW, 2);
+  ctx.fillStyle = '#6b7280';
+  ctx.font = font(18, '400');
+  ctx.textAlign = 'center';
+  footLines.forEach((ln, i) => ctx.fillText(ln, W / 2, y + 10 + i * 26));
+}
+
+let pfRedrawQueued = false;
+function pfUpdate(){
+  const d = pfReadData();
+  d.rows.forEach(r => { r.el.querySelector('.pf-sub').textContent = pfMoney(r.empty ? 0 : r.sub); });
+  pfEl('pfSumTotal').textContent = pfMoney(d.total);
+  pfEl('pfSumAdv').textContent = pfMoney(d.adelanto);
+  pfEl('pfSumSaldo').textContent = pfMoney(d.saldo);
+  const warn = pfEl('pfWarn');
+  if (d.adelanto > d.total) {
+    warn.textContent = 'El adelanto es mayor que el total: corrígelo para poder generar la proforma.';
+    warn.style.display = '';
+  } else {
+    warn.style.display = 'none';
+  }
+  if (!pfRedrawQueued) {
+    pfRedrawQueued = true;
+    requestAnimationFrame(() => {
+      pfRedrawQueued = false;
+      pfDraw(pfEl('pfCanvas'), pfReadData(), 1);
+    });
+  }
+}
+
+function pfFileName(d){
+  const slug = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const parts = ['Proforma', slug(d.nro) || 'sin-numero', slug(d.cliente).slice(0, 40) || 'cliente'];
+  return parts.join('-') + '.jpeg';
+}
+
+function pfReset(){
+  pfEl('pfNro').value = pfNextNumber();
+  pfEl('pfFecha').value = pfToday();
+  pfEl('pfValidez').value = '7';
+  pfEl('pfCliente').value = '';
+  pfEl('pfAdelanto').value = '';
+  pfEl('pfObs').value = '';
+  pfEl('pfItems').innerHTML = '';
+  pfAddRow();
+  pfEl('pfError').textContent = '';
+  pfEl('pfStatus').textContent = '';
+  pfUpdate();
+}
+
+(function initProforma(){
+  const itemsWrap = pfEl('pfItems');
+  ['pfNro', 'pfFecha', 'pfCliente', 'pfValidez', 'pfAdelanto', 'pfObs'].forEach(id => {
+    pfEl(id).addEventListener('input', pfUpdate);
+  });
+  itemsWrap.addEventListener('input', pfUpdate);
+  itemsWrap.addEventListener('change', (e) => {
+    // Si el nombre coincide con un producto del catálogo y no hay precio, se completa solo.
+    if (!e.target.classList.contains('pf-in-name')) return;
+    const row = e.target.closest('.pf-item');
+    const typed = e.target.value.trim().toLowerCase();
+    const match = (products || []).find(p => (p.name || '').trim().toLowerCase() === typed);
+    const priceEl = row.querySelector('.pf-in-price');
+    if (match && !priceEl.value.trim() && Number(match.price) > 0) priceEl.value = Number(match.price).toFixed(2);
+    pfUpdate();
+  });
+  itemsWrap.addEventListener('click', (e) => {
+    const del = e.target.closest('.pf-del');
+    if (!del) return;
+    const row = del.closest('.pf-item');
+    if (itemsWrap.children.length <= 1) {
+      row.querySelector('.pf-in-name').value = '';
+      row.querySelector('.pf-in-qty').value = '1';
+      row.querySelector('.pf-in-price').value = '';
+    } else {
+      row.remove();
+    }
+    pfUpdate();
+  });
+  pfEl('btnPfAddRow').addEventListener('click', () => {
+    const row = pfAddRow();
+    if (!row) {
+      pfEl('pfError').textContent = 'Máximo ' + PF_MAX_ITEMS + ' productos por proforma.';
+      return;
+    }
+    pfEl('pfError').textContent = '';
+    row.querySelector('.pf-in-name').focus();
+    pfUpdate();
+  });
+  pfEl('btnPfReset').addEventListener('click', () => {
+    const d = pfReadData();
+    const hasData = d.cliente || d.items.length || d.adelanto || d.obs;
+    if (hasData && !confirm('¿Empezar una proforma nueva? Se borrarán los datos que escribiste.')) return;
+    pfReset();
+  });
+  pfEl('btnPfGenerate').addEventListener('click', async () => {
+    const btn = pfEl('btnPfGenerate');
+    const errEl = pfEl('pfError');
+    const okEl = pfEl('pfStatus');
+    errEl.textContent = '';
+    okEl.textContent = '';
+    const d = pfReadData();
+    const err = pfValidate(d);
+    if (err) { errEl.textContent = err; return; }
+    const prevLabel = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Generando…';
+    try {
+      const blob = await pfExport(d);
+      if (!blob) throw new Error('No se pudo generar la imagen. Intenta de nuevo.');
+      const fileName = pfFileName(d);
+      let saved = null, saveErr = null;
+      try { saved = await pfSave(d); } catch (e) { saveErr = e; }
+      if (saveErr && /duplicate key|23505|proformas_nro_key/i.test(saveErr.message || '')) {
+        errEl.textContent = 'Ya existe una proforma con el N° ' + d.nro + '. Cambia el número y vuelve a generar.';
+        return;
+      }
+      pfDownloadBlob(blob, fileName);
+      pfBumpNumber(d.nro);
+      if (saved) {
+        pfProformas.unshift(saved);
+        pfReset();
+        okEl.textContent = '✅ Proforma guardada y descargada: ' + fileName + ' (' + Math.round(blob.size / 1024) + ' KB)';
+        pfActionError = '';
+        pfRenderSaved();
+      } else {
+        const msg = (saveErr && saveErr.message) || 'error desconocido';
+        const missing = /proformas|schema cache|PGRST205|not find/i.test(msg);
+        errEl.textContent = 'La imagen se descargó, pero NO se guardó en el historial: ' + msg + '.' +
+          (missing ? ' Falta crear la tabla "proformas" en Supabase (SQL de migración).' : ' Revisa tu conexión e inténtalo de nuevo.');
+      }
+    } catch (e) {
+      errEl.textContent = e.message || 'Ocurrió un error al generar la proforma.';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = prevLabel;
+    }
+  });
+
+  // ----- Historial: eventos -----
+  pfEl('pfSearch').addEventListener('input', pfRenderSaved);
+  pfEl('pfFilter').addEventListener('change', pfRenderSaved);
+  pfEl('pfSumDate').value = pfToday();
+  pfEl('pfSumDate').addEventListener('change', () => {
+    // En modo rango, si "Desde" pasa a "Hasta", se acerca "Hasta" para no dejar un rango inválido.
+    if (pfEl('pfSumRange').checked && pfEl('pfSumDate').value && pfEl('pfSumTo').value < pfEl('pfSumDate').value) pfEl('pfSumTo').value = pfEl('pfSumDate').value;
+    pfEl('pfSumTo').min = pfEl('pfSumDate').value || '';
+    pfRenderSummary();
+  });
+  pfEl('pfSumTo').addEventListener('change', pfRenderSummary);
+  pfEl('pfSumRange').addEventListener('change', () => {
+    const on = pfEl('pfSumRange').checked;
+    pfEl('pfSumToWrap').hidden = !on;
+    pfEl('pfSumDateLabel').textContent = on ? 'Desde' : 'Delivery programado el';
+    if (on) { pfEl('pfSumTo').value = pfEl('pfSumDate').value; pfEl('pfSumTo').min = pfEl('pfSumDate').value || ''; }
+    pfRenderSummary();
+  });
+  const savedList = pfEl('pfSavedList');
+  savedList.addEventListener('change', (e) => {
+    const chk = e.target.closest('.pf-deliv-chk');
+    if (chk) pfToggleDelivery(Number(chk.dataset.id), chk.checked, chk);
+  });
+  savedList.addEventListener('click', (e) => {
+    const dl = e.target.closest('[data-pf-dl]');
+    const vw = e.target.closest('[data-pf-view]');
+    const rm = e.target.closest('[data-pf-del]');
+    if (dl) pfDownloadSaved(Number(dl.dataset.pfDl), dl);
+    else if (vw) pfOpenView(Number(vw.dataset.pfView));
+    else if (rm) pfDeleteSaved(Number(rm.dataset.pfDel));
+  });
+  pfEl('btnPfViewClose').addEventListener('click', () => pfEl('pfViewOverlay').classList.remove('open'));
+  pfEl('pfViewOverlay').addEventListener('click', (e) => { if (e.target === pfEl('pfViewOverlay')) pfEl('pfViewOverlay').classList.remove('open'); });
+  pfEl('btnPfViewDownload').addEventListener('click', () => { if (pfViewingId != null) pfDownloadSaved(pfViewingId, pfEl('btnPfViewDownload')); });
+  pfReset();
+})();
+
+
+// ----- Proforma: exportar, guardar y historial -----
+let pfActionError = '';
+let pfViewingId = null;
+const PF_LIST_LIMIT = 100;
+
+function pfDownloadBlob(blob, fileName){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 3000);
+}
+function pfExport(d){
+  const c = document.createElement('canvas');
+  pfDraw(c, d, PF_EXPORT_SCALE);
+  return new Promise(resolve => c.toBlob(resolve, 'image/jpeg', PF_EXPORT_QUALITY));
+}
+// Convierte una fila guardada en los datos que entiende pfDraw. La imagen se vuelve a dibujar
+// igual que la original, por eso no hace falta guardar el .jpeg (solo ~1 KB de datos por proforma).
+function pfRowToDraw(p){
+  const items = (Array.isArray(p.items) ? p.items : []).map((it, i) => {
+    const qty = Number(it.qty) || 0;
+    const price = Number(it.price) || 0;
+    return { pos: i + 1, name: String(it.name || ''), qty, price, sub: pfRound(qty * price) };
+  });
+  return {
+    nro: p.nro, fecha: p.fecha, cliente: p.cliente,
+    validez: Number(p.validez_dias) || 0,
+    adelanto: Number(p.adelanto) || 0, total: Number(p.total) || 0, saldo: Number(p.saldo) || 0,
+    obs: p.observaciones || '', items,
+  };
+}
+async function pfSave(d){
+  const payload = {
+    nro: d.nro,
+    cliente: d.cliente,
+    fecha: d.fecha,
+    validez_dias: d.validez,
+    items: d.items.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+    total: d.total,
+    adelanto: d.adelanto,
+    saldo: d.saldo,
+    observaciones: d.obs || null,
+  };
+  const rows = await restRequest('POST', 'proformas', { body: payload, prefer: 'return=representation' });
+  if (!rows || !rows[0]) throw new Error('El servidor no confirmó el guardado');
+  return rows[0];
+}
+
+function pfSavedFiltered(){
+  const q = pfEl('pfSearch').value.trim().toLowerCase();
+  const f = pfEl('pfFilter').value;
+  return pfProformas.filter(p => {
+    if (f === 'si' && !p.programado_delivery) return false;
+    if (f === 'no' && p.programado_delivery) return false;
+    if (q && !(((p.cliente || '').toLowerCase().includes(q)) || ((p.nro || '').toLowerCase().includes(q)))) return false;
+    return true;
+  });
+}
+function pfRenderSaved(){
+  const listEl = pfEl('pfSavedList');
+  if (!listEl) return;
+  const emptyEl = pfEl('pfSavedEmpty');
+  const errEl = pfEl('pfSavedError');
+  const countEl = pfEl('pfSavedCount');
+  if (pfLoadError) {
+    const missing = /proformas|schema cache|PGRST205|does not exist|not find/i.test(pfLoadError);
+    errEl.textContent = missing
+      ? 'Falta crear la tabla de proformas en Supabase. Corre el SQL "migracion_proformas.sql" en Supabase → SQL Editor y recarga esta página.'
+      : 'No se pudieron cargar las proformas guardadas: ' + pfLoadError;
+    listEl.innerHTML = '';
+    emptyEl.style.display = 'none';
+    countEl.textContent = '';
+    pfRenderSummary();
+    return;
+  }
+  errEl.textContent = pfActionError;
+  const all = pfProformas;
+  const filtered = pfSavedFiltered();
+  const shown = filtered.slice(0, PF_LIST_LIMIT);
+  countEl.textContent = all.length ? (filtered.length === all.length ? '(' + all.length + ')' : '(' + filtered.length + ' de ' + all.length + ')') : '';
+  if (!shown.length) {
+    listEl.innerHTML = '';
+    emptyEl.textContent = all.length ? 'Ninguna proforma coincide con la búsqueda.' : 'Todavía no hay proformas guardadas. Cada proforma que generes aparecerá aquí.';
+    emptyEl.style.display = 'block';
+    pfRenderSummary();
+    return;
+  }
+  emptyEl.style.display = 'none';
+  listEl.innerHTML = shown.map(p => {
+    const items = Array.isArray(p.items) ? p.items : [];
+    const names = items.slice(0, 3).map(i => escapeHtml(i.name) + ' ×' + (Number(i.qty) || 0)).join(', ') +
+      (items.length > 3 ? ' y ' + (items.length - 3) + ' más' : '');
+    const marked = p.delivery_marcado_at
+      ? new Date(p.delivery_marcado_at).toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric' })
+      : '';
+    return `
+    <div class="pf-saved-row${p.programado_delivery ? ' is-delivery' : ''}">
+      <label class="pf-deliv">
+        <input type="checkbox" class="pf-deliv-chk" data-id="${p.id}"${p.programado_delivery ? ' checked' : ''}>
+        <span>Programado delivery</span>
+      </label>
+      <div>
+        <div class="pf-s-top"><strong>${escapeHtml(p.nro)}</strong> · ${escapeHtml(pfFormatDate(p.fecha))}${p.programado_delivery ? '<span class="pf-badge">Delivery programado' + (marked ? ' · ' + escapeHtml(marked) : '') + '</span>' : ''}</div>
+        <div class="pf-s-client">${escapeHtml(p.cliente)}</div>
+        <div class="pf-s-items">${items.length} producto${items.length === 1 ? '' : 's'}: ${names}</div>
+      </div>
+      <div class="pf-s-money">
+        <div><small>Total</small><span>${pfMoney(p.total)}</span></div>
+        <div><small>Adelanto</small><span>${pfMoney(p.adelanto)}</span></div>
+        <div class="pf-s-saldo"><small>Saldo</small><span>${pfMoney(p.saldo)}</span></div>
+      </div>
+      <div class="pf-s-actions">
+        <button class="btn-outline" data-pf-view="${p.id}">Ver</button>
+        <button class="btn-outline" data-pf-dl="${p.id}">⬇️ Descargar</button>
+        <button class="btn-danger" data-pf-del="${p.id}" title="Eliminar esta proforma" aria-label="Eliminar esta proforma">🗑</button>
+      </div>
+    </div>`;
+  }).join('') + (filtered.length > PF_LIST_LIMIT
+    ? '<p class="hint">Mostrando las ' + PF_LIST_LIMIT + ' más recientes. Usa el buscador para encontrar otras.</p>' : '');
+  pfRenderSummary();
+}
+
+function pfLocalDate(iso){
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function pfRenderSummary(){
+  const body = pfEl('pfSummaryBody');
+  if (!body) return;
+  if (pfLoadError) { body.innerHTML = ''; return; }
+  const range = pfEl('pfSumRange').checked;
+  const from = pfEl('pfSumDate').value;
+  const to = range ? pfEl('pfSumTo').value : from;
+  const rangeErr = pfEl('pfSumRangeErr');
+  rangeErr.textContent = '';
+  if (!from || (range && !to)) { body.innerHTML = '<p class="hint">Elige ' + (range ? 'las fechas "Desde" y "Hasta".' : 'una fecha.') + '</p>'; return; }
+  if (to < from) {
+    rangeErr.textContent = 'La fecha "Hasta" no puede ser anterior a la fecha "Desde".';
+    body.innerHTML = '';
+    return;
+  }
+  const list = pfProformas.filter(p => {
+    if (!p.programado_delivery || !p.delivery_marcado_at) return false;
+    const d = pfLocalDate(p.delivery_marcado_at);
+    return d >= from && d <= to;
+  });
+  if (!list.length) {
+    body.innerHTML = '<p class="hint">No hay proformas con delivery programado ' + (range ? 'en ese rango de fechas.' : 'en esa fecha.') + '</p>';
+    return;
+  }
+  const agg = new Map();
+  list.forEach(p => (Array.isArray(p.items) ? p.items : []).forEach(it => {
+    const name = String(it.name || '').trim();
+    const key = name.toLowerCase();
+    const cur = agg.get(key) || { name, qty: 0 };
+    cur.qty += Number(it.qty) || 0;
+    agg.set(key, cur);
+  }));
+  const rows = Array.from(agg.values()).sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  const units = rows.reduce((a, r) => a + r.qty, 0);
+  const saldo = pfRound(list.reduce((a, p) => a + (Number(p.saldo) || 0), 0));
+  body.innerHTML =
+    '<table class="pf-sum-table"><thead><tr><th>Producto</th><th>Cantidad a descontar</th></tr></thead><tbody>' +
+    rows.map(r => '<tr><td>' + escapeHtml(r.name) + '</td><td><strong>' + r.qty + '</strong></td></tr>').join('') +
+    '</tbody></table>' +
+    '<p class="pf-sum-meta">' + list.length + ' proforma' + (list.length === 1 ? '' : 's') + ': ' +
+    list.map(p => escapeHtml(p.nro)).join(', ') + ' · ' + units + ' unidades · Saldo por cobrar: <strong>' + pfMoney(saldo) + '</strong></p>';
+}
+
+async function pfToggleDelivery(id, checked, chk){
+  const p = pfProformas.find(x => x.id === id);
+  if (!p) return;
+  chk.disabled = true;
+  try {
+    const rows = await restRequest('PATCH', 'proformas', {
+      query: `?id=eq.${id}`,
+      body: { programado_delivery: checked, delivery_marcado_at: checked ? new Date().toISOString() : null },
+      prefer: 'return=representation',
+    });
+    if (!rows || !rows[0]) throw new Error('sin permiso o la proforma ya no existe');
+    Object.assign(p, rows[0]);
+    pfActionError = '';
+  } catch (err) {
+    pfActionError = 'No se pudo actualizar la proforma ' + p.nro + ': ' + err.message;
+  }
+  pfRenderSaved();
+}
+async function pfDeleteSaved(id){
+  const p = pfProformas.find(x => x.id === id);
+  if (!p) return;
+  if (!confirm('¿Eliminar la proforma ' + p.nro + ' de "' + p.cliente + '"? Esta acción no se puede deshacer.')) return;
+  try {
+    const rows = await restRequest('DELETE', 'proformas', { query: `?id=eq.${id}`, prefer: 'return=representation' });
+    if (!rows || !rows.length) throw new Error('sin permiso o la proforma ya no existe');
+    pfProformas = pfProformas.filter(x => x.id !== id);
+    pfActionError = '';
+  } catch (err) {
+    pfActionError = 'No se pudo eliminar: ' + err.message;
+  }
+  pfRenderSaved();
+}
+async function pfDownloadSaved(id, btn){
+  const p = pfProformas.find(x => x.id === id);
+  if (!p) return;
+  const prev = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Generando…'; }
+  try {
+    const d = pfRowToDraw(p);
+    const blob = await pfExport(d);
+    if (blob) pfDownloadBlob(blob, pfFileName(d));
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = prev; }
+  }
+}
+function pfOpenView(id){
+  const p = pfProformas.find(x => x.id === id);
+  if (!p) return;
+  pfViewingId = id;
+  pfEl('pfViewTitle').textContent = 'Proforma ' + p.nro + ' · ' + p.cliente;
+  pfDraw(pfEl('pfViewCanvas'), pfRowToDraw(p), 1);
+  pfEl('pfViewOverlay').classList.add('open');
+}
 
 let editingReclamoId = null;
 const reclamoOverlay = document.getElementById('reclamoOverlay');
